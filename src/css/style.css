@@ -1,0 +1,20 @@
+body{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    flex-direction: column-reverse;
+}
+.greenColor{
+    background-color: green;
+}
+.orangeColor{
+    background-color: orange;
+}
+.redColor{
+    background-color: red;
+}
+.felicidades{
+    background-image: linear-gradient(to left, #FFD700, #7B68EE, #3498db, #2ecc71, #FFD700);      
+}
