@@ -75,7 +75,7 @@ let counter = setInterval(() => {
     segundos +
     " Segundos";
 
-  // Cambiar clases de color según el tiempo restante
+  // Cambiar color depende del tiempo que quede
   if (meses >= 1) {
     timeElement.classList.remove("orangeColor", "redColor")
     timeElement.classList.add("greenColor")
