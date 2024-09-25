@@ -1,67 +1,72 @@
 const timeElement = document.getElementById("time");
 const bodyElement = document.getElementById("main");
 const h1Element = document.createElement("h1");
-const dateELement = document.createElement("input")
-dateELement.id = "datePicker"
-dateELement.name = "datePicker"
-dateELement.type = "date"
-bodyElement.append(dateELement)
-bodyElement.append(h1Element)
-h1Element.innerText = "Mi cumpleaños"
+const dateElement = document.createElement("input");
 
-let fechaCumple = new Date("2024-11-29T00:00:00")
-let fechaActual = new Date()
+dateElement.id = "datePicker";
+dateElement.name = "datePicker";
+dateElement.type = "date";
+
+bodyElement.append(dateElement);
+bodyElement.append(h1Element);
+h1Element.innerText = "Mi cumpleaños";
+
+let fechaCumple = new Date("2024-11-29T00:00:00");
+let fechaActual = new Date();
 let diferencia = fechaCumple - fechaActual;
 
-let msSegundos = 1000
-let msMinutos = msSegundos * 60
-let msHoras = msMinutos * 60
-let msDias = msHoras * 24
+const msSegundos = 1000;
+const msMinutos = msSegundos * 60;
+const msHoras = msMinutos * 60;
+const msDias = msHoras * 24;
 
-// Calcular los días, horas, minutos y segundos
-let dias = Math.floor(diferencia / msDias)
-let horas = Math.floor((diferencia % msDias) / msHoras)
-let minutos = Math.floor((diferencia % msHoras) / msMinutos)
-let segundos = Math.floor((diferencia % msMinutos) / msSegundos)
+let dias, horas, minutos, segundos, meses;
 
-// Calcular meses asumiendo que todos tienen 30 días
-let meses = Math.floor(dias / 30)
-dias = dias % 30; // Días restantes después de contar meses
+function calcularDiferencia() {
+  fechaActual = new Date();
+  diferencia = fechaCumple - fechaActual;
 
+  // Calcular los días, horas, minutos y segundos
+  dias = Math.floor(diferencia / msDias);
+  horas = Math.floor((diferencia % msDias) / msHoras);
+  minutos = Math.floor((diferencia % msHoras) / msMinutos);
+  segundos = Math.floor((diferencia % msMinutos) / msSegundos);
 
+  // Calcular meses asumiendo que todos tienen 30 días
+  meses = Math.floor(dias / 30);
+  dias = dias % 30; // Días restantes después de contar meses
+}
 
-let counter = setInterval(() => {
-  // Decrementar segundos
-  segundos--
-  
+function actualizarContador() {
+  segundos--;
+
   if (segundos < 0) {
-    segundos = 59
+    segundos = 59;
     minutos--;
   }
 
   if (minutos < 0) {
-    minutos = 59
-    horas--
+    minutos = 59;
+    horas--;
   }
 
   if (horas < 0) {
-    horas = 23
-    dias--
+    horas = 23;
+    dias--;
   }
 
   if (dias < 0) {
-    dias = 29 
-    meses--
+    dias = 29;
+    meses--;
   }
 
-  // Detener el contador si el tiempo llega a cero
   if (meses < 0) {
-    clearInterval(counter)
+    clearInterval(counter);
     timeElement.innerText = "FELICIDADES!"
-    return
+    timeElement.classList.remove("orangeColor", "redColor", "greenColor");
+    timeElement.classList.add("felicidades");;
+    return;
   }
-
-
 
   timeElement.innerText =
     meses +
@@ -75,22 +80,29 @@ let counter = setInterval(() => {
     segundos +
     " Segundos";
 
-  // Cambiar color depende del tiempo que quede
+  // Cambiar color dependiendo del tiempo que quede
   if (meses >= 1) {
-    timeElement.classList.remove("orangeColor", "redColor")
-    timeElement.classList.add("greenColor")
+    timeElement.classList.remove("orangeColor", "redColor");
+    timeElement.classList.add("greenColor");
   } else if (dias > 7) {
-    timeElement.classList.remove("greenColor", "redColor")
-    timeElement.classList.add("orangeColor")
+    timeElement.classList.remove("greenColor", "redColor");
+    timeElement.classList.add("orangeColor");
   } else {
-    timeElement.classList.remove("greenColor", "orangeColor")
-    timeElement.classList.add("redColor")
+    timeElement.classList.remove("greenColor", "orangeColor");
+    timeElement.classList.add("redColor");
   }
-  
-}, 1000)
+}
 
+let counter = setInterval(() => {
+  actualizarContador();
+}, 1000);
+
+// Actualizar la fecha de cumpleaños y reiniciar el contador
 dateElement.addEventListener("change", () => {
-    if (dateElement.value) {
-        fechaCumple = new Date(dateElement.value + "T00:00:00"); // Actualizar la fecha
-    }
-})
+  if (dateElement.value) {
+    fechaCumple = new Date(dateElement.value + "T00:00:00"); // Actualizar la fecha de cumpleaños
+    calcularDiferencia(); // Recalcular la diferencia basada en la nueva fecha
+  }
+});
+
+calcularDiferencia();
